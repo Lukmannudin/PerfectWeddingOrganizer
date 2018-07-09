@@ -1,4 +1,10 @@
-
+<?php 
+    echo $venueErr."<br>";
+    echo $maxCapacityErr."<br>";
+    echo $locationErr."<br>";
+    echo $priceErr."<br>";
+    echo $status_venueErr."<br>";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

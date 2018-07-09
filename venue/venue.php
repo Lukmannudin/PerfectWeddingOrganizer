@@ -34,7 +34,7 @@
                 <td><?php echo $row["max_capacity"] ?></td>
                 <td><?php echo $row["location"] ?></td>
                 <td><?php echo $row["venue_price"] ?></td>
-                <td><?php echo $row['status_vanue'] ?></td>
+                <td><?php echo $row['status_venue'] ?></td>
                 <td><a href="venue_model.php?id_venue=<?php echo $row['id_venue'] ?>&method=delete">Delete</a></td>
             </tr>
 

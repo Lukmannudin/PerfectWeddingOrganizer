@@ -18,13 +18,7 @@
         }
 
         function addDataVenue(){
-        
-            // $venueErr=NULL;
-            // $maxCapacityErr=NULL;
-            // $locationErr=NULL;
-            // $priceErr=NULL;
-            // $status_venueErr=NULL;
-            // Pengecekan error penginputan
+        $link = getLinkDatabase();
             
             $venue_name = secure_input($_POST['venue_name']);
                 $max_capacity = secure_input($_POST['max_capacity']);
@@ -49,14 +43,7 @@
                         );
                     saveDataVenue($link,$data);
                 } else {
-                    // include 'venue_add.php';
-                    
-                    echo $venueErr.'<br>';
-                    echo $maxCapacityErr.'<br>';
-                    echo $locationErr.'<br>';
-                    echo $priceErr.'<br>';
-                    echo $status_venueErr.'<br>';
-
+                    include 'venue_add.php';
                 }
                 
             
