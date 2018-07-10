@@ -1,5 +1,5 @@
 <?php
-    require 'mc_model.php';
+    require 'vendor_makeup_model.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +10,7 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="mc_add.php">ADD</a> <a href="venue_delete"></a>
+    <a href="vendor_makeup_add.php">ADD</a> <a href="venue_delete"></a>
     <table>
         <tr>
             <td>No</td>
@@ -21,17 +21,17 @@
         </tr>
         <?php
             $no=1; 
-           $res =  selectAllMC();
+           $res =  selectAllVM();
            if (mysqli_num_rows($res) > 0) {
             // output data of each row
             while($row = mysqli_fetch_assoc($res)) {
                  ?>     
             <tr>
-                <td><a href="mc_model.php?id_mc=<?php echo $row['id_mc'] ?>&method=edit"><?php echo $no ?></a></td>
+                <td><a href="vendor_makeup_model.php?id_vendor_makeup=<?php echo $row['id_vendor_makeup'] ?>&method=edit"><?php echo $no ?></a></td>
                 <td><?php echo $row["name"] ?></td>
                 <td><?php echo $row["phone_number"] ?></td>
                 <td><?php echo $row["address"] ?></td>
-                <td><a href="mc_model.php?id_mc=<?php echo $row['id_mc'] ?>&method=delete">Delete</a></td>
+                <td><a href="vendor_makeup_model.php?id_vendor_makeup=<?php echo $row['id_vendor_makeup'] ?>&method=delete">Delete</a></td>
             </tr>
 
             <?php    

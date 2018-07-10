@@ -2,42 +2,42 @@
         require("../database.php");
         
     
-        if (isset($_GET['id_mc'])) {
-            $id_mc = $_GET['id_mc'];
+        if (isset($_GET['id_vendor_makeup'])) {
+            $id_vendor_makeup = $_GET['id_vendor_makeup'];
             if (isset($_GET['method'])) {
                 if (($_GET['method']) == "edit") {
-                    editMc($id_mc);
+                    editVM($id_vendor_makeup);
                 } elseif (($_GET['method']) == "delete") {
-                    deleteMc($id_mc);
+                    deleteVM($id_vendor_makeup);
                 }
             }
         }
 
         if (isset($_POST['saveDataSubmit'])) {
-            addDataMc();
+            addDatavendor_makeup();
         }
         
             
-        function addDataMc(){
+        function addDatavendor_makeup(){
         $link = getLinkDatabase();
             
-                $mc_name = secure_input($_POST['mc_name']);
+                $vm_name = secure_input($_POST['vm_name']);
                 $phone_number = secure_input($_POST['phone_number']);
                 $address = secure_input($_POST['address']);    
 
-                $mcNameErr =  mcNameValidation($mc_name);
-                $mcPhoneNumberErr =  mcPhoneNumberValidation($phone_number);
-                $mcAddressErr  =   mcAddressValidation($address);
+                $vMNameErr =  vendor_makeupNameValidation($vm_name);
+                $vMPhoneNumberErr =  vendor_makeupPhoneNumberValidation($phone_number);
+                $VMAddressErr  =   vendor_makeupAddressValidation($address);
 
-                if ( ($mcNameErr=="") && ($mcPhoneNumberErr=="") && ($mcAddressErr=="")) {
+                if ( ($vMNameErr=="") && ($vMPhoneNumberErr=="") && ($VMAddressErr=="")) {
                     $data = array(
-                            'name' => $mc_name,
+                            'name' => $vm_name,
                             'phone_number' => $phone_number,
                             'address' => $address
                         );
                     saveDataVenue($link,$data);
                 } else {
-                    include 'mc_add.php';
+                    include 'vendor_makeup_add.php';
                 }
                 
             
@@ -48,24 +48,24 @@
             return koneksi_db();  
         }
 
-        function selectAllMC(){
-            $sql = 'SELECT * FROM `mc`';
+        function selectAllVM(){
+            $sql = 'SELECT * FROM `vendor_makeup`';
             $res = mysqli_query(getLinkDatabase(),$sql);
             return $res;
         }
 
-        function editMc($id_mc){
+        function editVM($id_vendor_makeup){
             $sql = "";
             $data = array();
             $link = getLinkDatabase();
-            $sql = "SELECT * FROM mc WHERE id_mc='$id_mc'";
+            $sql = "SELECT * FROM vendor_makeup WHERE id_vendor_makeup='$id_vendor_makeup'";
             
             $res = mysqli_query($link,$sql);
             if (mysqli_num_rows($res) > 0) {
                 // output data of each row
                 while($row = mysqli_fetch_assoc($res)) {
                     $data = array (
-                        "id_mc" => $row['id_mc'],
+                        "id_vendor_makeup" => $row['id_vendor_makeup'],
                         "name" => $row['name'],
                         "phone_number" => $row['phone_number'],
                         "address" => $row['address'],
@@ -74,25 +74,25 @@
             }    
 
             
-            include("mc_edit.php");
+            include("vendor_makeup_edit.php");
             if (isset($_POST['updateDataSubmit'])) {
                 $data_update = array(
-                    "id_mc" => $data['id_mc'],
-                    "name" => secure_input($_POST['mc_name']),
+                    "id_vendor_makeup" => $data['id_vendor_makeup'],
+                    "name" => secure_input($_POST['vm_name']),
                     "phone_number" => secure_input($_POST['phone_number']),
                     "address" => secure_input($_POST['address']),
                 );
 
-                $sql = "UPDATE `mc` 
+                $sql = "UPDATE `vendor_makeup` 
                     SET 
                     `name` = '$data_update[name]', 
                     `phone_number` = '$data_update[phone_number]', 
                     `address` = '$data_update[address]'
-                    WHERE `mc`.`id_mc` = $id_mc";
+                    WHERE `vendor_makeup`.`id_vendor_makeup` = $id_vendor_makeup";
                 
                 $res = mysqli_query($link,$sql);
                 if ($res) {
-                        header('Location: mc.php');
+                        header('Location: vendor_makeup.php');
                     } else {
                         "<h1> Failed to update data </h1>";
                     }
@@ -106,21 +106,21 @@
         // function saveData
 
         function saveDataVenue($link,$data){
-            $sql = "INSERT INTO `mc` 
-            (`id_mc`, `name`, `phone_number`, `address`) 
+            $sql = "INSERT INTO `vendor_makeup` 
+            (`id_vendor_makeup`, `name`, `phone_number`, `address`) 
             VALUES (NULL, '$data[name]', '$data[phone_number]', '$data[phone_number]')";
             $res = mysqli_query($link,$sql);
             if ($res) {
-                header('Location: mc.php');
+                header('Location: vendor_makeup.php');
             } else {
-                header('Location: mc_add.php');
+                header('Location: vendor_makeup_add.php');
             }
         }
 
-        function deleteMc($id){
-            $sql = "DELETE FROM `mc` WHERE `mc`.`id_mc` = '$id'";
+        function deleteVM($id){
+            $sql = "DELETE FROM `vendor_makeup` WHERE `vendor_makeup`.`id_vendor_makeup` = '$id'";
             $res = mysqli_query(getLinkDatabase(),$sql);
-            header('Location: mc.php');
+            header('Location: vendor_makeup.php');
             
         }
 
@@ -134,16 +134,16 @@
         
     
 
-        function mcNameValidation($mcNameData){
-            if (empty($mcNameData)) {
-                $mcNameErr = "MC Name is required";
+        function vendor_makeupNameValidation($vendor_makeupNameData){
+            if (empty($vendor_makeupNameData)) {
+                $vMNameErr = "vendor_makeup Name is required";
             } else {
-                $mcNameErr = "";
+                $vMNameErr = "";
             }
-            return $mcNameErr;
+            return $vMNameErr;
         }
 
-        function mcPhoneNumberValidation($phoneNumberData){
+        function vendor_makeupPhoneNumberValidation($phoneNumberData){
             if (empty($phoneNumberData)) {
                 $phoneNumberErr = "Phone Number is required";
             } else {
@@ -152,7 +152,7 @@
             return $phoneNumberErr;
         }
 
-        function mcAddressValidation($addressData){
+        function vendor_makeupAddressValidation($addressData){
             if (empty($addressData)) {
                 $addressErr = "Address is required";
             } else {
