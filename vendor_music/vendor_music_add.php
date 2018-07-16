@@ -1,9 +1,10 @@
 <?php 
-if ( (isset($PVNameErr)) || (isset($PVPhoneNumberErr)) || (isset($PVAddressErr))) {
-    echo $PVNameErr."<br>";
-    echo $PVPhoneNumberErr."<br>";
-    echo $PVAddressErr."<br>";  
+if ( (isset($nameErr)) || (isset($phoneNumberErr)) || (isset($addressErr))) {
+    echo $nameErr."<br>";
+    echo $phoneNumberErr."<br>";
+    echo $addressErr."<br>";
 }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,21 +15,21 @@ if ( (isset($PVNameErr)) || (isset($PVPhoneNumberErr)) || (isset($PVAddressErr))
     <title>Document</title>
 </head>
 <body>
-<a href="vendor_makeup.php">Back</a>
-    <form action="vendor_photovideo_model.php" method="post">
+<a href="vendor_music.php">Back</a>
+    <form action="vendor_music_model.php" method="post">
     <table>
         <tr>
-            <td>Vendor Name</td>
-            <td><input type="text" name="pm_name" id=""></td>
+            <td>Name</td>
+            <td><input type="text" name="name" id=""></td>
         </tr>
         <tr>
             <td>Phone Number</td>
-            <td><input type="text" name="phone_number" id=""></td>
+            <td><input type="number" name="phone_number" id=""></td>
         </tr>
         <tr>
             <td>Address</td>
             <td><textarea name="address" id="" cols="30" rows="10"></textarea></td>
-        </tr>
+        </tr>        
     </table>
     <input type="submit" name="saveDataSubmit" value="Save">
     </form>

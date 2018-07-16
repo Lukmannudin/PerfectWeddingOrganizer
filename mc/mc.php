@@ -12,6 +12,15 @@
 <body>
     <a href="mc_add.php">ADD</a> <a href="venue_delete"></a>
     <table>
+    <form action="" method='post'>
+        <select name="category" id="">
+            <option value="name">Name</option>
+            <option value="phone_number">Phone Number</option>
+            <option value="address">Address</option>
+        </select>
+        Search<input type="text" name="input_search">
+        <input type="submit" value="Search" name="search">
+    </form>
         <tr>
             <td>No</td>
             <td>MC Name</td>
@@ -21,7 +30,12 @@
         </tr>
         <?php
             $no=1; 
-           $res =  selectAllMC();
+            if (isset($hasil_search)) {
+                $res = $hasil_search;
+            } else {
+                $res =  selectAllMC();
+             }
+           
            if (mysqli_num_rows($res) > 0) {
             // output data of each row
             while($row = mysqli_fetch_assoc($res)) {

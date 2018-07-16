@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,7 @@
     <title>Document</title>
 </head>
 <body>
+
 <a href="venue.php">Back</a>
     <form action="" method="post">
     <table>
@@ -25,6 +27,10 @@
         <tr>
             <td>Price</td>
             <td><input type="text" name="price" id="" value="<?php echo $data['venue_price'] ?>"></td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><textarea name="venue_desc" id="" cols="30" rows="10"><?php echo $data['venue_desc'] ?></textarea></td>
         </tr>
         <tr>
             <td>

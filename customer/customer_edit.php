@@ -7,12 +7,16 @@
     <title>Document</title>
 </head>
 <body>
-<a href="mc.php">Back</a>
+<a href="customer.php">Back</a>
     <form action="" method="post">
     <table>
         <tr>
-            <td>Vendor Makeup Name</td>
-            <td><input type="text" name="vm_name" id="" value="<?php echo $data['name'] ?>"></td>
+            <td>Email</td>
+            <td><input type="text" name="email" id="" value="<?php echo $data['email'] ?>"></td>
+        </tr>
+        <tr>
+            <td>Customer Name</td>
+            <td><input type="text" name="name" id="" value="<?php echo $data['name'] ?>"></td>
         </tr>
         <tr>
             <td>Phone Number</td>
@@ -21,7 +25,11 @@
         <tr>
             <td>Address</td>
             <td><textarea name="address" id="" cols="30" rows="10" ><?php echo $data['address'] ?></textarea></td>
-        </tr> 
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><textarea name="address" id="" cols="30" rows="10" ><?php echo $data['desc'] ?></textarea></td>
+        </tr>
     </table>
     <input type="submit" name="updateDataSubmit" value="Save">
     </form>

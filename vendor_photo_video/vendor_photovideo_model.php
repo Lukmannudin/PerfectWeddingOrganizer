@@ -2,42 +2,53 @@
         require("../database.php");
         
     
-        if (isset($_GET['id_vendor_makeup'])) {
-            $id_vendor_makeup = $_GET['id_vendor_makeup'];
+        if (isset($_GET['id_vendor_photo_video'])) {
+            $id_vendor_photo_video = $_GET['id_vendor_photo_video'];
             if (isset($_GET['method'])) {
                 if (($_GET['method']) == "edit") {
-                    editVM($id_vendor_makeup);
+                    editPM($id_vendor_photo_video);
                 } elseif (($_GET['method']) == "delete") {
-                    deleteVM($id_vendor_makeup);
+                    deletePM($id_vendor_photo_video);
                 }
+            } else {
+                echo 'ID Tidak ditemukan';
             }
         }
 
         if (isset($_POST['saveDataSubmit'])) {
-            addDatavendor_makeup();
+            addDataid_vendor_photo_video();
+        }
+
+        if (isset($_POST['search'])) {
+            if (isset($_POST['category']) && isset($_POST['input_search']) && isset($_POST['input_search']) != '') {
+                $category = $_POST['category'];
+                $input_search = $_POST['input_search'];   
+                $hasil_search = search($category,$input_search);       
+                return $hasil_search;
+            }
         }
         
             
-        function addDatavendor_makeup(){
+        function addDataid_vendor_photo_video(){
         $link = getLinkDatabase();
             
-                $vm_name = secure_input($_POST['vm_name']);
+                $pm_name = secure_input($_POST['pm_name']);
                 $phone_number = secure_input($_POST['phone_number']);
                 $address = secure_input($_POST['address']);    
 
-                $vMNameErr =  vendor_makeupNameValidation($vm_name);
-                $vMPhoneNumberErr =  vendor_makeupPhoneNumberValidation($phone_number);
-                $VMAddressErr  =   vendor_makeupAddressValidation($address);
+                $PVNameErr =  vendor_photo_videoValidation($pm_name);
+                $PVPhoneNumberErr =  vendor_photo_videoPhoneNumberValidation($phone_number);
+                $PVAddressErr  =   vendor_photo_videoAddressValidation($address);
 
-                if ( ($vMNameErr=="") && ($vMPhoneNumberErr=="") && ($VMAddressErr=="")) {
+                if ( ($PVNameErr=="") && ($PVPhoneNumberErr=="") && ($PVAddressErr=="")) {
                     $data = array(
-                            'name' => $vm_name,
+                            'name' => $pm_name,
                             'phone_number' => $phone_number,
                             'address' => $address
                         );
                     saveDataVenue($link,$data);
                 } else {
-                    include 'vendor_makeup_add.php';
+                    include 'id_vendor_photo_video_add.php';
                 }
                 
             
@@ -48,79 +59,100 @@
             return koneksi_db();  
         }
 
-        function selectAllVM(){
-            $sql = 'SELECT * FROM `vendor_makeup`';
+        function selectAllPV(){
+            $sql = 'SELECT * FROM `vendor_photo_video`';
             $res = mysqli_query(getLinkDatabase(),$sql);
             return $res;
         }
 
-        function editVM($id_vendor_makeup){
+        function editPM($id_vendor_photo_video){
             $sql = "";
             $data = array();
             $link = getLinkDatabase();
-            $sql = "SELECT * FROM vendor_makeup WHERE id_vendor_makeup='$id_vendor_makeup'";
+            $sql = "SELECT * FROM vendor_photo_video WHERE id_vendor_photo_video='$id_vendor_photo_video'";
             
             $res = mysqli_query($link,$sql);
             if (mysqli_num_rows($res) > 0) {
                 // output data of each row
                 while($row = mysqli_fetch_assoc($res)) {
                     $data = array (
-                        "id_vendor_makeup" => $row['id_vendor_makeup'],
+                        "id_vendor_photo_video" => $row['id_vendor_photo_video'],
                         "name" => $row['name'],
                         "phone_number" => $row['phone_number'],
                         "address" => $row['address'],
                     );
                 }       
             }    
-
             
-            include("vendor_makeup_edit.php");
+            include("vendor_photovideo_edit.php");
             if (isset($_POST['updateDataSubmit'])) {
                 $data_update = array(
-                    "id_vendor_makeup" => $data['id_vendor_makeup'],
-                    "name" => secure_input($_POST['vm_name']),
+                    "id_vendor_photo_video" => $data['id_vendor_photo_video'],
+                    "name" => secure_input($_POST['pm_name']),
                     "phone_number" => secure_input($_POST['phone_number']),
                     "address" => secure_input($_POST['address']),
                 );
 
-                $sql = "UPDATE `vendor_makeup` 
+                $PVNameErr =  vendor_photo_videoValidation($_POST['pm_name']);
+                $PVPhoneNumberErr =  vendor_photo_videoPhoneNumberValidation($_POST['phone_number']);
+                $PVAddressErr  =   vendor_photo_videoAddressValidation($_POST['address']);
+                
+                if ( ($PVNameErr=="") && ($PVPhoneNumberErr=="") && ($PVAddressErr=="")) {
+                    $sql = "UPDATE `vendor_photo_video` 
                     SET 
                     `name` = '$data_update[name]', 
                     `phone_number` = '$data_update[phone_number]', 
                     `address` = '$data_update[address]'
-                    WHERE `vendor_makeup`.`id_vendor_makeup` = $id_vendor_makeup";
+                    WHERE `vendor_photo_video`.`id_vendor_photo_video` = $id_vendor_photo_video";
                 
                 $res = mysqli_query($link,$sql);
+                
+                
                 if ($res) {
-                        header('Location: vendor_makeup.php');
+                        header('Location: vendor_photovideo.php');
                     } else {
                         "<h1> Failed to update data </h1>";
                     }
-            } else {
-
+                } else {
+                       echo $PVNameErr.'<br>';
+                        echo $PVPhoneNumberErr.'<br>';
+                        echo $PVAddressErr.'<br>';
+                }   
             }
                 
             
         }
 
+        function search($category,$search){
+            $link = getLinkDatabase();
+            $sql = "SELECT * FROM vendor_photo_video WHERE $category LIKE '%$search%'";
+            $res = mysqli_query($link,$sql);
+            
+            if ($res->num_rows > 0) {
+                return $res;
+            } else {
+                return $res;
+            }
+        }
         // function saveData
 
         function saveDataVenue($link,$data){
-            $sql = "INSERT INTO `vendor_makeup` 
-            (`id_vendor_makeup`, `name`, `phone_number`, `address`) 
+            $sql = "INSERT INTO `vendor_photo_video` 
+            (`id_vendor_photo_video`, `name`, `phone_number`, `address`) 
             VALUES (NULL, '$data[name]', '$data[phone_number]', '$data[phone_number]')";
             $res = mysqli_query($link,$sql);
+            var_dump($res);
             if ($res) {
-                header('Location: vendor_makeup.php');
+                header('Location: vendor_photovideo.php');
             } else {
-                header('Location: vendor_makeup_add.php');
+                header('Location: vendor_photovideo_add.php');
             }
         }
 
-        function deleteVM($id){
-            $sql = "DELETE FROM `vendor_makeup` WHERE `vendor_makeup`.`id_vendor_makeup` = '$id'";
+        function deletePM($id){
+            $sql = "DELETE FROM `vendor_photo_video` WHERE `vendor_photo_video`.`id_vendor_photo_video` = '$id'";
             $res = mysqli_query(getLinkDatabase(),$sql);
-            header('Location: vendor_makeup.php');
+            header('Location: vendor_photovideo.php');
             
         }
 
@@ -134,16 +166,16 @@
         
     
 
-        function vendor_makeupNameValidation($vendor_makeupNameData){
-            if (empty($vendor_makeupNameData)) {
-                $vMNameErr = "vendor_makeup Name is required";
+        function vendor_photo_videoValidation($id_vendor_photo_videoNameData){
+            if (empty($id_vendor_photo_videoNameData)) {
+                $PVNameErr = "id_vendor_photo_video Name is required";
             } else {
-                $vMNameErr = "";
+                $PVNameErr = "";
             }
-            return $vMNameErr;
+            return $PVNameErr;
         }
 
-        function vendor_makeupPhoneNumberValidation($phoneNumberData){
+        function vendor_photo_videoPhoneNumberValidation($phoneNumberData){
             if (empty($phoneNumberData)) {
                 $phoneNumberErr = "Phone Number is required";
             } else {
@@ -152,7 +184,7 @@
             return $phoneNumberErr;
         }
 
-        function vendor_makeupAddressValidation($addressData){
+        function vendor_photo_videoAddressValidation($addressData){
             if (empty($addressData)) {
                 $addressErr = "Address is required";
             } else {

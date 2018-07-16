@@ -1,5 +1,5 @@
 <?php
-    require 'vendor_makeup_model.php';
+    require 'vendor_photovideo_model.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,28 +10,43 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="vendor_makeup_add.php">ADD</a> <a href="venue_delete"></a>
+    <a href="vendor_photovideo_add.php">ADD</a> <a href="venue_delete"></a>
+    <form action="" method='post'>
+        <select name="category" id="">
+            <option value="name">Vendor Name</option>
+            <option value="phone_number">Phone Number</option>
+            <option value="address">Address</option>
+        </select>
+        Search<input type="text" name="input_search">
+        <input type="submit" value="Search" name="search">
+    </form>
     <table>
         <tr>
             <td>No</td>
-            <td>MC Name</td>
+            <td>Vendor Name</td>
             <td>Phone Number</td>
             <td>Address</td>
             <td>Actions</td>
         </tr>
         <?php
             $no=1; 
-           $res =  selectAllVM();
+           
+            if (isset($hasil_search)) {
+                $res = $hasil_search;
+            } else {
+                $res =  selectAllPV();
+            }
+
            if (mysqli_num_rows($res) > 0) {
             // output data of each row
             while($row = mysqli_fetch_assoc($res)) {
                  ?>     
             <tr>
-                <td><a href="vendor_makeup_model.php?id_vendor_makeup=<?php echo $row['id_vendor_makeup'] ?>&method=edit"><?php echo $no ?></a></td>
+                <td><a href="vendor_photovideo_model.php?id_vendor_photo_video=<?php echo $row['id_vendor_photo_video'] ?>&method=edit"><?php echo $no ?></a></td>
                 <td><?php echo $row["name"] ?></td>
                 <td><?php echo $row["phone_number"] ?></td>
                 <td><?php echo $row["address"] ?></td>
-                <td><a href="vendor_makeup_model.php?id_vendor_makeup=<?php echo $row['id_vendor_makeup'] ?>&method=delete">Delete</a></td>
+                <td><a href="vendor_photovideo_model.php?id_vendor_photo_video=<?php echo $row['id_vendor_photo_video'] ?>&method=delete">Delete</a></td>
             </tr>
 
             <?php    

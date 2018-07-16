@@ -7,12 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-<a href="mc.php">Back</a>
+<a href="vendor_photovideo.php">Back</a>
     <form action="" method="post">
     <table>
         <tr>
-            <td>MC Name</td>
-            <td><input type="text" name="mc_name" id="" value="<?php echo $data['name'] ?>"></td>
+            <td>Vendor Name</td>
+            <td><input type="text" name="pm_name" id="" value="<?php echo $data['name'] ?>"></td>
         </tr>
         <tr>
             <td>Phone Number</td>

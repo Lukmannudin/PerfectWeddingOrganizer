@@ -16,6 +16,15 @@
         if (isset($_POST['saveDataSubmit'])) {
             addDatavendor_makeup();
         }
+
+        if (isset($_POST['search'])) {
+            if (isset($_POST['category']) && isset($_POST['input_search']) && isset($_POST['input_search']) != '') {
+                $category = $_POST['category'];
+                $input_search = $_POST['input_search'];   
+                $hasil_search = search($category,$input_search);       
+                return $hasil_search;
+            }
+        }
         
             
         function addDatavendor_makeup(){
@@ -82,25 +91,43 @@
                     "phone_number" => secure_input($_POST['phone_number']),
                     "address" => secure_input($_POST['address']),
                 );
+                
+                $vMNameErr =  vendor_makeupNameValidation($_POST['vm_name']);
+                $vMPhoneNumberErr =  vendor_makeupPhoneNumberValidation($_POST['phone_number']);
+                $VMAddressErr  =   vendor_makeupAddressValidation($_POST['address']);
 
-                $sql = "UPDATE `vendor_makeup` 
+                if ( ($vMNameErr=="") && ($vMPhoneNumberErr=="") && ($VMAddressErr=="")) {
+                    $sql = "UPDATE `vendor_makeup` 
                     SET 
                     `name` = '$data_update[name]', 
                     `phone_number` = '$data_update[phone_number]', 
                     `address` = '$data_update[address]'
                     WHERE `vendor_makeup`.`id_vendor_makeup` = $id_vendor_makeup";
                 
-                $res = mysqli_query($link,$sql);
-                if ($res) {
-                        header('Location: vendor_makeup.php');
+                    $res = mysqli_query($link,$sql);
+                    if ($res) {
+                            header('Location: vendor_makeup.php');
                     } else {
-                        "<h1> Failed to update data </h1>";
+                            "<h1> Failed to update data </h1>";
                     }
-            } else {
+                } else {
+                    echo $vMNameErr.'<br>';
+                    echo $vMPhoneNumberErr.'<br>';
+                    echo $VMAddressErr.'<br>';
+                }
+            }          
+        }
 
-            }
-                
+        function search($category,$search){
+            $link = getLinkDatabase();
+            $sql = "SELECT * FROM vendor_makeup WHERE $category LIKE '%$search%'";
+            $res = mysqli_query($link,$sql);
             
+            if ($res->num_rows > 0) {
+                return $res;
+            } else {
+                return $res;
+            }
         }
 
         // function saveData

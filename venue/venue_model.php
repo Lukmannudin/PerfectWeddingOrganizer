@@ -17,6 +17,16 @@
             addDataVenue();
         }
 
+        if (isset($_POST['search'])) {
+            if (isset($_POST['category']) && isset($_POST['input_search']) && isset($_POST['input_search']) != '') {
+                $category = $_POST['category'];
+                $input_search = $_POST['input_search'];   
+                $hasil_search = search($category,$input_search);       
+                return $hasil_search;
+            }
+        }
+
+        
         function addDataVenue(){
         $link = getLinkDatabase();
             
@@ -76,6 +86,7 @@
                         "venue_name" => $row['venue_name'],
                         "location" => $row['location'],
                         "venue_price" => $row['venue_price'],
+                        "venue_desc" => $row['venue_desc'],
                         "status_venue" => $row['status_venue']
                     );
                 }       
@@ -97,28 +108,56 @@
                     "venue_name" => secure_input($_POST['venue_name']),
                     "location" => secure_input($_POST['location']),
                     "venue_price" => secure_input($_POST['price']),
+                    "venue_desc" => secure_input($_POST['venue_desc']),
                     "status_venue" => secure_input($_POST['status_venue'])
                 );
 
-                $sql = "UPDATE `venue` 
-                    SET 
-                    `max_capacity` = '$data_update[max_capacity]', 
-                    `venue_name` = '$data_update[venue_name]', 
-                    `venue_price` = '$data_update[venue_price]', 
-                    `status_venue` = '$data_update[status_venue]' 
-                    WHERE `venue`.`id_venue` = $id_venue";
                 
-                $res = mysqli_query($link,$sql);
-                    if ($res) {
-                        header('Location: venue.php');
-                    } else {
-                        "<h1> Failed to update data </h1>";
-                }
-            } else {
+                $venueErr = venueValidation($data_update['venue_name']);
+                    $maxCapacityErr = maxCapacityValidation($data_update['max_capacity']);
+                    $locationErr = locationValidation($data_update['location']);
+                    $priceErr = priceValidation($data_update['venue_price']);
+                    $status_venueErr = status_venueValidation($data_update['status_venue']);
+                                   
+
+                if ( ($venueErr=="") && ($maxCapacityErr=="") && ($locationErr=="") && ($priceErr=="") && ($status_venueErr=="") ) {
+                    $sql = "UPDATE `venue` 
+                        SET 
+                        `max_capacity` = '$data_update[max_capacity]', 
+                        `venue_name` = '$data_update[venue_name]', 
+                        `venue_price` = '$data_update[venue_price]',
+                        `venue_desc` = '$data_update[venue_desc]', 
+                        `status_venue` = '$data_update[status_venue]' 
+                        WHERE `venue`.`id_venue` = $id_venue";
+                 var_dump($sql);
+                    $res = mysqli_query($link,$sql);
+                        if ($res) {
+                            header('Location: venue.php');
+                        } else {
+                            "<h1> Failed to update data </h1>";
+                        }
+                } else {
+                   echo $venueErr.'<br>';
+                   echo $maxCapacityErr.'<br>';
+                   echo $locationErr.'<br>';
+                   echo $priceErr.'<br>';
+                   echo $status_venueErr.'<br>';
+                }    
 
             }
                 
             
+        }
+        function search($category,$search){
+            $link = getLinkDatabase();
+            $sql = "SELECT * FROM venue WHERE $category LIKE '%$search%'";
+            $res = mysqli_query($link,$sql);
+            
+            if ($res->num_rows > 0) {
+                return $res;
+            } else {
+                return $res;
+            }
         }
 
         // function saveData

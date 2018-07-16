@@ -16,6 +16,15 @@
         if (isset($_POST['saveDataSubmit'])) {
             addDataMc();
         }
+
+        if (isset($_POST['search'])) {
+            if (isset($_POST['category']) && isset($_POST['input_search']) && isset($_POST['input_search']) != '') {
+                $category = $_POST['category'];
+                $input_search = $_POST['input_search'];   
+                $hasil_search = search($category,$input_search);       
+                return $hasil_search;
+            }
+        }
         
             
         function addDataMc(){
@@ -83,7 +92,12 @@
                     "address" => secure_input($_POST['address']),
                 );
 
-                $sql = "UPDATE `mc` 
+                $mcNameErr =  mcNameValidation($_POST['mc_name']);
+                $mcPhoneNumberErr =  mcPhoneNumberValidation($_POST['phone_number']);
+                $mcAddressErr  =   mcAddressValidation($_POST['address']);
+
+                if ( ($mcNameErr=="") && ($mcPhoneNumberErr=="") && ($mcAddressErr=="")) {
+                    $sql = "UPDATE `mc` 
                     SET 
                     `name` = '$data_update[name]', 
                     `phone_number` = '$data_update[phone_number]', 
@@ -96,11 +110,27 @@
                     } else {
                         "<h1> Failed to update data </h1>";
                     }
-            } else {
-
-            }
+                } else {
+                    echo $mcNameErr.'<br>';
+                    echo $mcPhoneNumberErr.'<br>';
+                    echo $mcAddressErr  .'<br>';
+                    
+                }
+            } 
                 
             
+        }
+
+        function search($category,$search){
+            $link = getLinkDatabase();
+            $sql = "SELECT * FROM mc WHERE $category LIKE '%$search%'";
+            $res = mysqli_query($link,$sql);
+            
+            if ($res->num_rows > 0) {
+                return $res;
+            } else {
+                return $res;
+            }
         }
 
         // function saveData
